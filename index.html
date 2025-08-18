@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Component Genie</title>
+  <link rel="icon" href="https://andiegogiap.com/assets/favicon.ico" sizes="any">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root {
+      --dark-grey: #121212;
+      --panel-grey-translucent: rgba(26, 26, 26, 0.6);
+      --neon-blue: #00d0ff;
+      --neon-pink: #f000ff;
+      --neon-green: #39ff14;
+      --neon-purple: #9d00ff;
+      --text-light: #e5e7eb;
+      --text-dark: #000000;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 var(--neon-purple);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(157, 0, 255, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(157, 0, 255, 0);
+      }
+    }
+
+    body {
+      color-scheme: dark;
+      background-color: var(--dark-grey);
+      color: var(--text-light);
+      overflow: hidden; /* Prevent body scroll with full-screen layout */
+    }
+
+    /* Custom Neon Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--dark-grey);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--neon-purple);
+      border-radius: 3px;
+      box-shadow: 0 0 3px var(--neon-purple), 0 0 6px var(--neon-purple);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--neon-pink);
+      box-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+    }
+
+    /* Custom Neon Focus Ring */
+    .neon-focus-ring:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--dark-grey), 0 0 0 4px var(--neon-pink);
+    }
+  </style>
+</head>
+<body class="bg-[var(--dark-grey)] text-[var(--text-light)]">
+  <div id="root"></div>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "@google/genai": "https://esm.sh/@google/genai@0.14.0",
+    "@monaco-editor/react": "https://esm.sh/@monaco-editor/react@4.6.0"
+  }
+}
+</script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
