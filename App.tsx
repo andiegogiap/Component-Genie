@@ -181,7 +181,7 @@ const OrbMenu = ({ onGenerate, onSave, onExport, isSavable, isGeneratable, isExp
                     <button onClick={() => { onExport(); setIsOpen(false); }} disabled={!isExportable} className="w-full text-center px-4 py-2 text-sm font-bold text-[var(--neon-pink)] uppercase tracking-wider bg-transparent border-2 border-[var(--neon-pink)] rounded-md transition-all duration-300 hover:bg-[var(--neon-pink)] hover:text-[var(--text-dark)] hover:shadow-[0_0_15px_var(--neon-pink)] disabled:border-gray-600 disabled:text-gray-600 disabled:cursor-not-allowed">Export JSON</button>
                 </div>
             )}
-            <button onClick={() => setIsOpen(!isOpen)} className="w-16 h-16 rounded-full bg-[var(--neon-purple)] flex items-center justify-center text-white cursor-pointer animate-pulse" style={{ animation: 'pulse 2s infinite' }}>
+            <button onClick={() => setIsOpen(!isOpen)} aria-label="Open actions menu" className="w-16 h-16 rounded-full bg-[var(--neon-purple)] flex items-center justify-center text-white cursor-pointer animate-pulse" style={{ animation: 'pulse 2s infinite' }}>
                 <MagicWandIcon />
             </button>
         </div>
@@ -415,7 +415,8 @@ export const App = () => {
                 
                 <div className="h-full flex flex-col bg-[var(--panel-grey-translucent)] backdrop-blur-sm rounded-lg border border-[var(--neon-purple)]/30" style={{ flexBasis: `${panelSizes[0]}%` }}>
                     <div className="p-2 border-b-2 border-[var(--neon-purple)]/30"><h2 className="text-sm font-bold text-center uppercase tracking-wider text-[var(--neon-purple)]" style={{textShadow: '0 0 4px var(--neon-purple)'}}>Prompt & Files</h2></div>
-                    <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Describe the component..." className="w-full p-4 bg-transparent text-[var(--text-light)] resize-none focus:outline-none font-mono text-sm h-40 neon-focus-ring"/>
+                    <label htmlFor="prompt-input" className="sr-only">Describe the component to generate</label>
+                    <textarea id="prompt-input" value={prompt} onChange={(e) => setPrompt(e.target.value)} placeholder="Describe the component..." className="w-full p-4 bg-transparent text-[var(--text-light)] resize-none focus:outline-none font-mono text-sm h-40 neon-focus-ring"/>
                     <div className="flex-1 overflow-y-auto">
                         <SamplePrompts onSelect={setPrompt} />
                         <div className="p-2 border-y-2 border-[var(--neon-purple)]/30"><h2 className="text-sm font-bold text-center uppercase tracking-wider text-[var(--neon-purple)]" style={{textShadow: '0 0 4px var(--neon-purple)'}}>File Explorer</h2></div>
