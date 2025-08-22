@@ -351,26 +351,30 @@ export const App = () => {
 
     const handleMouseDown = (e: React.MouseEvent, index: number) => { resizingRef.current = { isResizing: true, handleIndex: index }; };
     const handleMouseUp = useCallback(() => { resizingRef.current = { isResizing: false, handleIndex: null }; }, []);
+    
     const handleMouseMove = useCallback((e: MouseEvent) => {
         if (!resizingRef.current.isResizing || resizingRef.current.handleIndex === null || !containerRef.current) return;
         const handleIndex = resizingRef.current.handleIndex;
         const { left, width } = containerRef.current.getBoundingClientRect();
         const newX = Math.max(0, Math.min(e.clientX - left, width));
-        let newSizes = [...panelSizes];
-        const minPanelSize = 10;
-        if (handleIndex === 0) {
-            const combined = newSizes[0] + newSizes[1];
-            let panel0Size = Math.min(Math.max((newX / width) * 100, minPanelSize), combined - minPanelSize);
-            newSizes[0] = panel0Size;
-            newSizes[1] = combined - panel0Size;
-        } else if (handleIndex === 1) {
-            const combined = newSizes[1] + newSizes[2];
-            let panel1Size = Math.min(Math.max(((newX / width) * 100) - newSizes[0], minPanelSize), combined - minPanelSize);
-            newSizes[1] = panel1Size;
-            newSizes[2] = combined - panel1Size;
-        }
-        setPanelSizes(newSizes.map(s => Math.round(s * 100) / 100) as PanelSizes);
-    }, [panelSizes]);
+        
+        setPanelSizes(currentSizes => {
+            let newSizes = [...currentSizes];
+            const minPanelSize = 10;
+            if (handleIndex === 0) {
+                const combined = newSizes[0] + newSizes[1];
+                let panel0Size = Math.min(Math.max((newX / width) * 100, minPanelSize), combined - minPanelSize);
+                newSizes[0] = panel0Size;
+                newSizes[1] = combined - panel0Size;
+            } else if (handleIndex === 1) {
+                const combined = newSizes[1] + newSizes[2];
+                let panel1Size = Math.min(Math.max(((newX / width) * 100) - newSizes[0], minPanelSize), combined - minPanelSize);
+                newSizes[1] = panel1Size;
+                newSizes[2] = combined - panel1Size;
+            }
+            return newSizes.map(s => Math.round(s * 100) / 100) as PanelSizes;
+        });
+    }, []);
 
     useEffect(() => {
         window.addEventListener('mousemove', handleMouseMove);
@@ -410,7 +414,7 @@ export const App = () => {
                 </div>
             </header>
 
-            <main ref={containerRef} className="flex flex-1 overflow-hidden relative p-4 gap-4">
+            <main ref={containerRef} className="flex flex-1 overflow-hidden relative p-4">
                 {error && <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black border-2 border-[var(--neon-pink)] text-white px-4 py-2 rounded-lg text-sm z-30 font-mono shadow-[0_0_15px_var(--neon-pink)]">{error}</div>}
                 
                 <div className="h-full flex flex-col bg-[var(--panel-grey-translucent)] backdrop-blur-sm rounded-lg border border-[var(--neon-purple)]/30" style={{ flexBasis: `${panelSizes[0]}%` }}>
@@ -424,14 +428,14 @@ export const App = () => {
                     </div>
                 </div>
                 
-                <div onMouseDown={(e) => handleMouseDown(e, 0)} className="w-1.5 h-full cursor-col-resize rounded-full bg-[var(--neon-purple)]/30 hover:bg-[var(--neon-purple)] transition-all duration-200" style={{boxShadow: '0 0 10px var(--neon-purple)'}}></div>
+                <div onMouseDown={(e) => handleMouseDown(e, 0)} className="w-1.5 h-full cursor-col-resize rounded-full bg-[var(--neon-purple)]/30 hover:bg-[var(--neon-purple)] transition-all duration-200 flex-shrink-0 mx-2" style={{boxShadow: '0 0 10px var(--neon-purple)'}}></div>
 
                 <div className="h-full flex flex-col bg-[var(--panel-grey-translucent)] backdrop-blur-sm rounded-lg border border-[var(--neon-blue)]/30" style={{ flexBasis: `${panelSizes[1]}%` }}>
                    <div className="p-2 border-b-2 border-[var(--neon-blue)]/30"><h2 className="text-sm font-bold text-center uppercase tracking-wider text-[var(--neon-blue)]" style={{textShadow: '0 0 4px var(--neon-blue)'}}>Preview</h2></div>
                     <div className="flex-1 p-4 overflow-auto">{!editorContent && <div className="text-center text-gray-500">Generate a component to see a preview.</div>}{editorContent && <DynamicComponentRenderer code={editorContent} onRenderError={handleRenderError} />}</div>
                 </div>
                 
-                <div onMouseDown={(e) => handleMouseDown(e, 1)} className="w-1.5 h-full cursor-col-resize rounded-full bg-[var(--neon-blue)]/30 hover:bg-[var(--neon-blue)] transition-all duration-200" style={{boxShadow: '0 0 10px var(--neon-blue)'}}></div>
+                <div onMouseDown={(e) => handleMouseDown(e, 1)} className="w-1.5 h-full cursor-col-resize rounded-full bg-[var(--neon-blue)]/30 hover:bg-[var(--neon-blue)] transition-all duration-200 flex-shrink-0 mx-2" style={{boxShadow: '0 0 10px var(--neon-blue)'}}></div>
 
                 <div className="h-full flex flex-col bg-[var(--panel-grey-translucent)] backdrop-blur-sm rounded-lg border border-[var(--neon-green)]/30" style={{ flexBasis: `${panelSizes[2]}%` }}>
                     <div className="p-2 border-b-2 border-[var(--neon-green)]/30 flex justify-between items-center">
